@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Scoped CSS Variables and JS</title>
+</head>
+<body>
+  <h2>Update CSS Variables with <span class='hl'>JS</span></h2>
+
+  <div class="controls">
+    <label for="spacing">Spacing:</label>
+    <input id="spacing" type="range" name="spacing" min="10" max="200" value="10" data-sizing="px">
+
+    <label for="blur">Blur:</label>
+    <input id="blur" type="range" name="blur" min="0" max="25" value="10" data-sizing="px">
+
+    <label for="base">Base Color</label>
+    <input id="base" type="color" name="base" value="#ffc600">
+  </div>
+
+  <img src="https://source.unsplash.com/7bwQXzbF6KE/800x500">
+
+  <style>
+
+    /*
+      misc styles, nothing to do with CSS variables
+    */
+
+    :root {
+      --base: rgb(226, 226, 0);
+      --blur: 10px;
+      --spacing: 10px;
+    }
+    img {
+      padding: var(--spacing);
+      background: var(--base);
+      filter: blur(var(--blur));
+    }
+
+    .hl {
+      color: var(--base);
+    }
+
+
+    body {
+      text-align: center;
+      background: #193549;
+      color: white;
+      font-family: 'helvetica neue', sans-serif;
+      font-weight: 100;
+      font-size: 50px;
+    }
+
+    .controls {
+      margin-bottom: 50px;
+    }
+
+    input {
+      width: 100px;
+    }
+  </style>
+ 
+
+  <script>
+// how do we write javascript to update the page?
+
+const inputs = document.querySelectorAll('.controls input');
+
+function handleUpdate() {
+const suffix = this.dataset.sizing || "";  //we are defining the suffix because at the moment it's just a number 
+document.documentElement.style.setProperty(`--${this.name}`, this.value + suffix);
+console.log(this.name);
+}
+
+inputs.forEach(input => input.addEventListener('change', handleUpdate)); 
+// we want to listen to change event and when that is called we want to use the function "handleUpdate".
+inputs.forEach(input => input.addEventListener('mousemove', handleUpdate));
+
+
+// now we are able to change the variable and apply to all the elements we selected. We did this by selecting all the elements that control them, then we did but creating a const value of inputs which we can use to 
+// to use the forEach method, to loop through each input and add a event listener to the event type and ask for a call back function to apply the updates on all the elements we selected.
+// the event type being the mousemove and change. 
+// then we needed to define the suffix otherwise the pixels will not be applied. We used the dataset to be able to fetch this suffix, dataset can be used when you define them in the HTML. 
+// then we selected the entire document, and set property to a new value for those elements in css concerned.
+// we set property to this.name with varying names and append the new value according to the event listener.
+// now image, the word are set to change according to user.
+
+
+  </script>
+
+</body>
+</html>
